@@ -5,7 +5,7 @@ IMPLEMENTED
 - response JWT token when successfully logged 
 
 TODO :
-- validation in DTO layer : TODO 
+- validation in DTO layer 
 - Unit test Login
 - Unit test register
 - Swagger UI 
