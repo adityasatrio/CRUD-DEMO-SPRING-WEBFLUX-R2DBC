@@ -1,0 +1,5 @@
+package com.crud.example.democrud.domains.user.model;
+
+public enum Role {
+    ROLE_USER, ROLE_ADMIN
+}
