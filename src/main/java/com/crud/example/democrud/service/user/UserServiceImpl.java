@@ -1,6 +1,6 @@
 package com.crud.example.democrud.service.user;
 
-import com.crud.example.democrud.configs.security.JwtValidationUtil;
+import com.crud.example.democrud.configs.jwt.JwtValidationUtil;
 import com.crud.example.democrud.domains.user.model.User;
 import com.crud.example.democrud.domains.user.repository.UserRepository;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.crud.example.democrud.service.authentication;
 
-import com.crud.example.democrud.configs.security.JwtTokenUtil;
+import com.crud.example.democrud.configs.jwt.JwtTokenUtil;
 import com.crud.example.democrud.configs.security.UserPasswordEncoder;
 import com.crud.example.democrud.controller.web.authentication.dto.RegisterRequest;
 import com.crud.example.democrud.domains.user.model.Role;
@@ -45,7 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public Mono<String> login(String phone, String password) {
         return userRepository.findByPhone(phone)
                 .filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                .map(user -> jwtTokenUtil.generateToken(user))
+                .map(jwtTokenUtil::generateToken)
                 .switchIfEmpty(Mono.<String>error(new RuntimeException("Login failed - not found phone number or wrong password")));
     }
 

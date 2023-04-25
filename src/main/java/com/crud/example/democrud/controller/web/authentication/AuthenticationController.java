@@ -7,21 +7,30 @@ import com.crud.example.democrud.controller.web.authentication.dto.LoginResponse
 import com.crud.example.democrud.controller.web.authentication.dto.RegisterRequest;
 import com.crud.example.democrud.controller.web.authentication.dto.RegisterResponse;
 import com.crud.example.democrud.service.authentication.AuthenticationService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping(value = "/authentication")
 public class AuthenticationController extends BaseController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("login")
+    @PostMapping("/login")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successfully logged user"),
+            @ApiResponse(responseCode = "500", description = "failed login user"),
+            @ApiResponse(responseCode = "403", description = "user or password is invalid")
+    })
     public Mono<ResponseEntity<BaseResponse<LoginResponse>>> login(@RequestBody LoginRequest loginRequest) {
         //TODO : catch error from DTO validation
         return authenticationService.login(loginRequest.getPhoneNumber(), loginRequest.getPassword())
@@ -38,7 +47,11 @@ public class AuthenticationController extends BaseController {
                                 .build())));
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successfully register user"),
+            @ApiResponse(responseCode = "500", description = "failed register user")
+    })
     public Mono<ResponseEntity<BaseResponse<RegisterResponse>>> login(@RequestBody RegisterRequest registerRequest) {
         //TODO : catch error from DTO validation
         return authenticationService.register(registerRequest)

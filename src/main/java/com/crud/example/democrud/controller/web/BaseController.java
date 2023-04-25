@@ -1,10 +1,12 @@
 package com.crud.example.democrud.controller.web;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-public class BaseController{
+@SecurityRequirement(name = "bearerAuth")
+public class BaseController {
 
     private static final String BEARER = "Bearer ";
 
@@ -14,4 +16,5 @@ public class BaseController{
                 .map(authHeaderBearer -> authHeaderBearer.substring(BEARER.length()));
 
     }
+
 }
