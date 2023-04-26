@@ -32,6 +32,7 @@ Implementation
 - [ ] API GRPC
 - [ ] Dockerized
 - [ ] Logging configuration
+- [ ] CQRS architecture using AXIOS ??
 
 How to 
 1. Compile and run spring boot application
