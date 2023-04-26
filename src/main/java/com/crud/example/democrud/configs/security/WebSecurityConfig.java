@@ -11,13 +11,15 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
 
-@AllArgsConstructor
+
+@Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-@Configuration
+@AllArgsConstructor
 public class WebSecurityConfig {
     private static final String LOGIN_URL = "/login";
     private static final String REGISTER_URL = "/register";
+    private static final String SWAGGER_URL = "/webjars/swagger-ui/**";
 
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
@@ -40,7 +42,12 @@ public class WebSecurityConfig {
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST).permitAll()
-                .pathMatchers(LOGIN_URL, REGISTER_URL).permitAll()
+                .pathMatchers(
+                        LOGIN_URL,
+                        REGISTER_URL,
+                        SWAGGER_URL
+                )
+                .permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .build();

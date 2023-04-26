@@ -1,6 +1,6 @@
 package com.crud.example.democrud.service.authentication;
 
-import com.crud.example.democrud.configs.security.JwtTokenUtil;
+import com.crud.example.democrud.configs.jwt.JwtTokenUtil;
 import com.crud.example.democrud.configs.security.UserPasswordEncoder;
 import com.crud.example.democrud.controller.web.authentication.dto.RegisterRequest;
 import com.crud.example.democrud.domains.user.model.Role;
@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 @Service
@@ -33,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .phone(registerRequest.getPhoneNumber())
                 .username(registerRequest.getName())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .roles(Arrays.asList(Role.ROLE_USER))
+                .roles(Role.ROLE_USER.name())
                 .enabled(Boolean.TRUE)
                 .createdBy(registerRequest.getName())
                 .build();
@@ -45,7 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public Mono<String> login(String phone, String password) {
         return userRepository.findByPhone(phone)
                 .filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                .map(user -> jwtTokenUtil.generateToken(user))
+                .map(jwtTokenUtil::generateToken)
                 .switchIfEmpty(Mono.<String>error(new RuntimeException("Login failed - not found phone number or wrong password")));
     }
 

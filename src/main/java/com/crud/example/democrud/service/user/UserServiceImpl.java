@@ -1,6 +1,6 @@
 package com.crud.example.democrud.service.user;
 
-import com.crud.example.democrud.configs.security.JwtValidationUtil;
+import com.crud.example.democrud.configs.jwt.JwtValidationUtil;
 import com.crud.example.democrud.domains.user.model.User;
 import com.crud.example.democrud.domains.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -22,17 +22,17 @@ public class UserServiceImpl implements UserService {
                 .flatMap(userRepository::findByPhone)
                 .filter(Objects::nonNull)
                 .map(User::getUsername)
-                .doOnError(throwable -> new Throwable("error when get username", throwable.getCause()));
+                .switchIfEmpty(Mono.<String>error(new RuntimeException("error when get username - not found phone number")));
     }
     @Override
     public Mono<User> updateName(String token, String newName) {
         return Mono.just(jwtValidationUtil.getPhone(token))
                 .flatMap(userRepository::findByPhone)
                 .filter(Objects::nonNull)
+                .switchIfEmpty(Mono.<User>error(new RuntimeException("error when get username - not found phone number")))
                 .flatMap(user -> {
                     user.setUsername(newName);
                     return userRepository.save(user);
-                })
-                .doOnError(throwable -> new Throwable("error when update username", throwable.getCause()));
+                });
     }
 }
