@@ -1,5 +1,6 @@
 package com.crud.example.democrud.domains.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,9 +13,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @SuperBuilder
@@ -36,24 +37,14 @@ public class User extends BaseEntity implements UserDetails {
     @Column("enabled")
     private Boolean enabled;
 
-    //@Column("roles")
-    //private String role;
-
     @Column("roles")
-    private List<Role> roles;
-
-    /*public User(String phoneNumber, String name, String password) {
-        this.phoneNumber = phoneNumber;
-        this.name = name;
-        this.password = password;
-    }*/
+    private String roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.name()))
-                .collect(Collectors.toList());
-        //return new ArrayList<>();
+        List<SimpleGrantedAuthority> grantedAuthoritiesRoles = new ArrayList<>();
+        grantedAuthoritiesRoles.add(new SimpleGrantedAuthority(this.roles));
+        return grantedAuthoritiesRoles;
     }
 
     @Override
@@ -81,7 +72,7 @@ public class User extends BaseEntity implements UserDetails {
         return false;
     }
 
-    //@JsonIgnore
+    @JsonIgnore
     @Override
     public String getPassword() {
         return password;

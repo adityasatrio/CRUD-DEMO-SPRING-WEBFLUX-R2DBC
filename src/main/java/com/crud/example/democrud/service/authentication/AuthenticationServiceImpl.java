@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 @Service
@@ -33,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .phone(registerRequest.getPhoneNumber())
                 .username(registerRequest.getName())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .roles(Arrays.asList(Role.ROLE_USER))
+                .roles(Role.ROLE_USER.name())
                 .enabled(Boolean.TRUE)
                 .createdBy(registerRequest.getName())
                 .build();
